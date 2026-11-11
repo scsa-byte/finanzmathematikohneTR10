@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Finanzmathematik – Prüfungstraining Klasse 10</title>
+<style>
+:root{--ink:#172033;--muted:#64748b;--line:#d8deea;--paper:#fff;--bg:#f3f6fb;--blue:#2457a7;--blue2:#eaf1ff;--green:#147a4b;--greenbg:#e8f7ef;--red:#b42318;--redbg:#fff0ee;--gold:#8a5b00}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+header{background:#142b4b;color:#fff;padding:28px max(20px,calc((100% - 1080px)/2)) 24px}
+header h1{margin:0 0 6px;font-size:clamp(1.45rem,3vw,2.15rem)}header p{margin:0;color:#dbe7f8}
+main{max-width:1080px;margin:22px auto;padding:0 16px 60px}
+.panel,.task{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:18px;margin:0 0 16px;box-shadow:0 2px 8px #15294a0a}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.stat{background:#f8faff;border:1px solid var(--line);border-radius:10px;padding:12px}.stat strong{display:block;font-size:1.35rem}
+.progress{height:10px;background:#e6ebf4;border-radius:20px;overflow:hidden;margin-top:10px}.progress span{display:block;height:100%;background:var(--blue);width:0;transition:width .2s}
+nav{display:flex;gap:8px;flex-wrap:wrap;margin:16px 0}nav button,.btn{border:1px solid var(--line);border-radius:9px;padding:9px 13px;background:#fff;color:var(--ink);font:inherit;cursor:pointer}nav button.active,.btn.primary{background:var(--blue);border-color:var(--blue);color:white}
+nav button:hover,.btn:hover{filter:brightness(.97)}.section{display:none}.section.active{display:block}
+h2{margin:0 0 5px;font-size:1.4rem}.sub{color:var(--muted);margin:0 0 14px}
+.task h3{font-size:1rem;margin:0 0 8px}.task p{margin:6px 0 12px}.tasktop{display:flex;justify-content:space-between;gap:10px;align-items:center}.points{font-size:.85rem;color:var(--muted);white-space:nowrap}
+.fields{display:flex;gap:12px;flex-wrap:wrap}.field{display:flex;flex-direction:column;gap:4px;min-width:145px;flex:1}.field label{font-size:.9rem;color:#42516a}
+input[type=text],input[type=number]{width:100%;max-width:240px;border:1px solid #bdc8d9;border-radius:8px;padding:10px;font:inherit;background:#fff}
+input:focus{outline:3px solid #cbdcff;border-color:var(--blue)}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.btn{font-size:.92rem}.btn.primary{font-weight:600}
+.feedback{margin-top:10px;padding:10px 12px;border-radius:9px;display:none}.feedback.show{display:block}.good{background:var(--greenbg);color:#075c37}.bad{background:var(--redbg);color:#8e1d16}.hint{background:#fff7df;color:#674700}
+.solution{font-size:.93rem;margin-top:6px}
+.badge{display:inline-block;background:var(--blue2);color:#214c91;border-radius:20px;padding:3px 9px;font-size:.78rem}
+.statement{font-weight:600}.small{font-size:.88rem;color:var(--muted)}
+footer{color:var(--muted);font-size:.85rem;text-align:center;padding:20px}
+@media(max-width:650px){.stats{grid-template-columns:repeat(2,1fr)}header{padding:22px 18px}.panel,.task{padding:14px}}
+</style>
+</head>
+<body>
+<header><h1>Finanzmathematik – Prüfungstraining</h1><p>Wirtschaftsschule · Jahrgangsstufe 10 · Kopfrechnen ohne Taschenrechner</p></header>
+<main>
+<section class="panel">
+ <div class="stats">
+  <div class="stat"><span class="small">Erreichte Punkte</span><strong id="score">0 / 0</strong></div>
+  <div class="stat"><span class="small">Bearbeitet</span><strong id="done">0 / 86</strong></div>
+  <div class="stat"><span class="small">Richtig</span><strong id="correct">0</strong></div>
+  <div class="stat"><span class="small">Fortschritt</span><strong id="percent">0 %</strong></div>
+ </div>
+ <div class="progress"><span id="bar"></span></div>
+ <p class="small">Deine Eingaben und dein Lernstand werden auf diesem Gerät im Browser gespeichert. Du kannst jederzeit weiterüben.</p>
+ <div class="actions"><button class="btn" onclick="resetAll()">Lernstand zurücksetzen</button></div>
+</section>
+<nav id="tabs">
+ <button class="active" data-tab="umwandeln">1 · Zahlen umwandeln</button>
+ <button data-tab="zinsen">2 · Tageszinsen</button>
+ <button data-tab="brueche">3 · Brüche</button>
+ <button data-tab="theorie">4 · Wahr oder falsch</button>
+ <button data-tab="formelweg">5 · Formelweg</button>
+</nav>
+<div id="umwandeln" class="section active">
+ <section class="panel"><h2>Bruch, Dezimalzahl und Prozent</h2><p class="sub">Gib jeweils die beiden anderen Schreibweisen an. Bei Ergänzungsaufgaben ist der gesuchte Anteil als Bruch anzugeben. Dezimalzahlen mit Komma oder Punkt sind möglich.</p></section>
+ <div id="tasks-umwandeln"></div>
+</div>
+<div id="zinsen" class="section">
+ <section class="panel"><h2>Zinsrechnung mit kaufmännischer Tageszählung</h2><p class="sub">Nutze die Formel Z = K · p · t / 36.000. Ein Jahr hat 360 Tage. Stelle die Formel je nach Aufgabe nach t, p, K oder Z um. Gib Zahlen ohne Einheit ein.</p></section>
+ <div id="tasks-zinsen"></div>
+</div>
+<div id="brueche" class="section">
+ <section class="panel"><h2>Brüche erweitern und kürzen</h2><p class="sub">Trage Zähler und Nenner ein. Kürze vollständig, wenn danach gefragt wird. Gleichwertige Brüche werden bei Erweiterungsaufgaben akzeptiert, sofern der verlangte Erweiterungsfaktor eingehalten wird.</p></section>
+ <div id="tasks-brueche"></div>
+</div>
+<div id="theorie" class="section">
+ <section class="panel"><h2>Fachwissen: Wahr oder falsch?</h2><p class="sub">Entscheide anhand der vorgegebenen Theorie. Jede Aussage zählt einen Punkt.</p></section>
+ <div id="tasks-theorie"></div>
+</div>
+<div id="formelweg" class="section">
+ <section class="panel"><h2>Welche Formel brauche ich?</h2><p class="sub">Die Aufgaben orientieren sich am abgebildeten Entscheidungsdiagramm: Laufzeit, Rentenzahlung, Zahlungszeitpunkt, Anfangskapital und Kapitalmehrung/-minderung.</p></section>
+ <div id="tasks-formelweg"></div>
+</div>
+<footer>Prüfungstraining Finanzmathematik · Jede Aufgabe ist einzeln prüfbar. Nutze Tipps und Lösungen zur Selbstkontrolle.</footer>
+</main>
+<script>
+const tasks = {
+umwandeln: [
+ {q:"Ein Viertel der Sitzplätze im Bus ist frei. Gib den Anteil als Dezimalzahl und Prozentzahl an.",f:["Dezimalzahl","Prozent"],a:["0,25","25"],u:[""," %"],h:"1/4 bedeutet 1 geteilt durch 4. Ein Viertel von 100 % sind 25 %.",s:"1/4 = 0,25 = 25 %."},
+ {q:"0,6 der bestellten Waren sind bereits geliefert. Gib den Anteil als Bruch und Prozentzahl an.",f:["Bruch","Prozent"],a:["3/5","60"],u:[""," %"],h:"0,6 bedeutet 6 Zehntel. Du kannst 6/10 direkt als Bruch angeben; Kürzen ist nicht erforderlich.",s:"0,6 = 6/10 = 3/5 = 60 %."},
+ {q:"Bei einer Umfrage stimmen 35 % für eine Änderung. Gib Dezimalzahl und Bruch an.",f:["Dezimalzahl","Bruch"],a:["0,35","7/20"],u:["",""],h:"35 % bedeutet 35 von 100. Schreibe den Prozentwert als Bruch mit dem Nenner 100.",s:"35 % = 0,35 = 35/100 = 7/20."},
+ {q:"Drei Viertel der Lagerfläche sind belegt. Gib Dezimalzahl und Prozentzahl an.",f:["Dezimalzahl","Prozent"],a:["0,75","75"],u:[""," %"],h:"3/4 = 75/100.",s:"3/4 = 0,75 = 75 %."},
+ {q:"0,125 der Kundschaft nutzt den Onlineservice. Gib Bruch und Prozentzahl an.",f:["Bruch","Prozent"],a:["1/8","12,5"],u:[""," %"],h:"0,125 entspricht 125 Tausendstel. Schreibe den Bruch mit dem Nenner 1000.",s:"0,125 = 1/8 = 12,5 %."},
+ {q:"20 % der Rechnungen werden bar bezahlt. Gib Bruch und Dezimalzahl an.",f:["Bruch","Dezimalzahl"],a:["1/5","0,2"],u:["",""],h:"20 % bedeutet 20 von 100. Du kannst 20/100 direkt angeben.",s:"20 % = 20/100 = 1/5 = 0,2."},
+ {q:"Von 100 Parkplätzen sind 2/5 frei. Welcher Anteil ist belegt? Gib den Bruch an.",f:["Belegter Anteil als Bruch"],a:["3/5"],u:[""],h:"Der gesamte Parkplatz entspricht 1. Rechne 1 − 2/5.",s:"1 − 2/5 = 5/5 − 2/5 = 3/5."},
+ {q:"0,04 der Produkte sind beschädigt. Gib Bruch und Prozentzahl an.",f:["Bruch","Prozent"],a:["1/25","4"],u:[""," %"],h:"0,04 entspricht 4 Hundertstel. Schreibe den Bruch mit dem Nenner 100.",s:"0,04 = 4/100 = 1/25 = 4 %."},
+ {q:"60 % der Ware ist verkauft. Gib den Anteil als Bruch und Dezimalzahl an.",f:["Bruch","Dezimalzahl"],a:["3/5","0,6"],u:["",""],h:"60 % bedeutet 60 von 100. Du kannst 60/100 direkt als Bruch angeben.",s:"60 % = 60/100 = 3/5 = 0,6."},
+ {q:"Ein Achtel der Beschäftigten arbeitet in Teilzeit. Gib Dezimalzahl und Prozentzahl an.",f:["Dezimalzahl","Prozent"],a:["0,125","12,5"],u:[""," %"],h:"1 : 8 = 0,125. Mit 100 multiplizieren ergibt Prozent.",s:"1/8 = 0,125 = 12,5 %."},
+ {q:"0,9 der Kunden bezahlen mit Karte. Gib Bruch und Prozentzahl an.",f:["Bruch","Prozent"],a:["9/10","90"],u:[""," %"],h:"0,9 = 9/10. Für Prozent mit 100 multiplizieren.",s:"0,9 = 9/10 = 90 %."},
+ {q:"15 % der Artikel sind reduziert. Gib Dezimalzahl und Bruch an.",f:["Dezimalzahl","Bruch"],a:["0,15","3/20"],u:["",""],h:"15 % bedeutet 15 von 100. Schreibe den Prozentwert als Bruch mit dem Nenner 100.",s:"15 % = 0,15 = 15/100 = 3/20."},
+ {q:"Von 20 gleich großen Fächern sind 5 leer. Gib den Anteil der leeren Fächer als Bruch und Prozentzahl an.",f:["Bruch","Prozent"],a:["1/4","25"],u:[""," %"],h:"5 von 20 Fächern sind leer. Das entspricht 25 von 100 Fächern, also 25/100.",s:"5/20 = 1/4 = 25 %."},
+ {q:"Bei einer Lieferung sind 7/10 der Kartons unbeschädigt. Gib Dezimalzahl und Prozentzahl an.",f:["Dezimalzahl","Prozent"],a:["0,7","70"],u:[""," %"],h:"7/10 = 70/100.",s:"7/10 = 0,7 = 70 %."},
+ {q:"0,45 der Einnahmen stammen aus dem Onlineshop. Gib Bruch und Prozentzahl an.",f:["Bruch","Prozent"],a:["9/20","45"],u:[""," %"],h:"0,45 entspricht 45 Hundertstel. Schreibe den Bruch mit dem Nenner 100.",s:"0,45 = 45/100 = 9/20 = 45 %."},
+ {q:"Ein Fünftel der Parkplätze ist belegt. Gib den Anteil der freien Parkplätze als Bruch und Prozentzahl an.",f:["Freier Anteil als Bruch","Prozent"],a:["4/5","80"],u:[""," %"],h:"Gesamt = 1. Freier Anteil: 1 − 1/5.",s:"1 − 1/5 = 4/5 = 80 %."}
+],
+zinsen: [
+ {q:"K = 1.000 €, p = 3 %, t = 120 Tage. Berechne die Zinsen Z.",f:["Zinsen Z in €"],a:["10"],u:[" €"],h:"Z = K · p · t / 36.000.",s:"Z = 1.000 · 3 · 120 / 36.000 = 10 €."},
+ {q:"Z = 6 €, K = 1.200 €, p = 3 %. Berechne die Laufzeit t in Tagen.",f:["Laufzeit t"],a:["60"],u:[" Tage"],h:"t = Z · 36.000 / (K · p).",s:"t = 6 · 36.000 / (1.200 · 3) = 60 Tage."},
+ {q:"Z = 12 €, K = 2.000 €, t = 72 Tage. Berechne p.",f:["Zinssatz p"],a:["3"],u:[" %"],h:"p = Z · 36.000 / (K · t).",s:"p = 12 · 36.000 / (2.000 · 72) = 3 %."},
+ {q:"Z = 8 €, p = 4 %, t = 90 Tage. Berechne das Kapital K.",f:["Kapital K"],a:["800"],u:[" €"],h:"K = Z · 36.000 / (p · t).",s:"K = 8 · 36.000 / (4 · 90) = 800 €."},
+ {q:"K = 600 €, p = 6 %, t = 30 Tage. Berechne Z.",f:["Zinsen Z in €"],a:["3"],u:[" €"],h:"30 Tage sind ein Zwölftel des kaufmännischen Jahres.",s:"Z = 600 · 6 · 30 / 36.000 = 3 €."},
+ {q:"Z = 15 €, K = 1.500 €, p = 6 %. Berechne t.",f:["Laufzeit t"],a:["60"],u:[" Tage"],h:"Stelle nach t um: Z · 36.000 / (K · p).",s:"t = 15 · 36.000 / (1.500 · 6) = 60 Tage."},
+ {q:"Z = 9 €, K = 900 €, t = 60 Tage. Berechne p.",f:["Zinssatz p"],a:["6"],u:[" %"],h:"p = 9 · 36.000 / (900 · 60).",s:"p = 6 %."},
+ {q:"Z = 4 €, p = 2 %, t = 90 Tage. Berechne K.",f:["Kapital K"],a:["800"],u:[" €"],h:"K = 4 · 36.000 / (2 · 90).",s:"K = 800 €."},
+ {q:"K = 2.400 €, p = 5 %, t = 30 Tage. Berechne Z.",f:["Zinsen Z in €"],a:["10"],u:[" €"],h:"Ein Monat hat 30 Tage.",s:"Z = 2.400 · 5 · 30 / 36.000 = 10 €."},
+ {q:"Z = 4 €, K = 800 €, p = 6 %. Berechne t.",f:["Laufzeit t"],a:["30"],u:[" Tage"],h:"t = 4 · 36.000 / (800 · 6).",s:"t = 30 Tage."},
+ {q:"Z = 5 €, K = 1.000 €, t = 90 Tage. Berechne p.",f:["Zinssatz p"],a:["2"],u:[" %"],h:"p = 5 · 36.000 / (1.000 · 90).",s:"p = 2 %."},
+ {q:"Z = 12 €, p = 3 %, t = 60 Tage. Berechne K.",f:["Kapital K"],a:["2.400"],u:[" €"],h:"K = 12 · 36.000 / (3 · 60).",s:"K = 2.400 €."},
+ {q:"K = 500 €, p = 4 %, t = 180 Tage. Berechne Z.",f:["Zinsen Z in €"],a:["10"],u:[" €"],h:"180 Tage sind ein halbes kaufmännisches Jahr.",s:"Z = 500 · 4 · 180 / 36.000 = 10 €."},
+ {q:"Z = 7,50 €, K = 1.500 €, p = 3 %. Berechne t.",f:["Laufzeit t"],a:["60"],u:[" Tage"],h:"t = 7,5 · 36.000 / (1.500 · 3).",s:"t = 60 Tage."},
+ {q:"Z = 6 €, K = 1.200 €, t = 90 Tage. Berechne p.",f:["Zinssatz p"],a:["2"],u:[" %"],h:"p = 6 · 36.000 / (1.200 · 90).",s:"p = 2 %."},
+ {q:"Z = 6 €, p = 3 %, t = 90 Tage. Berechne K.",f:["Kapital K"],a:["800"],u:[" €"],h:"K = 6 · 36.000 / (3 · 90).",s:"K = 800 €."}
+],
+brueche: [
+ {q:"Erweitere 1/3 mit dem Faktor 4.",f:["Zähler","Nenner"],a:["4","12"],u:["",""],h:"Multipliziere Zähler und Nenner mit 4.",s:"1/3 = 4/12."},
+ {q:"Erweitere 2/5 mit dem Faktor 3.",f:["Zähler","Nenner"],a:["6","15"],u:["",""],h:"2 · 3 und 5 · 3.",s:"2/5 = 6/15."},
+ {q:"Kürze 8/12 vollständig.",f:["Zähler","Nenner"],a:["2","3"],u:["",""],h:"Der größte gemeinsame Teiler von 8 und 12 ist 4.",s:"8/12 = 2/3."},
+ {q:"Kürze 15/25 vollständig.",f:["Zähler","Nenner"],a:["3","5"],u:["",""],h:"Teile Zähler und Nenner durch 5.",s:"15/25 = 3/5."},
+ {q:"Erweitere 3/4 mit dem Faktor 5.",f:["Zähler","Nenner"],a:["15","20"],u:["",""],h:"Multipliziere beide Teile des Bruchs mit 5.",s:"3/4 = 15/20."},
+ {q:"Kürze 18/24 vollständig.",f:["Zähler","Nenner"],a:["3","4"],u:["",""],h:"Teile Zähler und Nenner durch 6.",s:"18/24 = 3/4."},
+ {q:"Erweitere 1/6 mit dem Faktor 6.",f:["Zähler","Nenner"],a:["6","36"],u:["",""],h:"1 · 6 und 6 · 6.",s:"1/6 = 6/36."},
+ {q:"Kürze 21/35 vollständig.",f:["Zähler","Nenner"],a:["3","5"],u:["",""],h:"Teile Zähler und Nenner durch 7.",s:"21/35 = 3/5."},
+ {q:"Erweitere 2/3 mit dem Faktor 10.",f:["Zähler","Nenner"],a:["20","30"],u:["",""],h:"Beide Zahlen mit 10 multiplizieren.",s:"2/3 = 20/30."},
+ {q:"Kürze 14/49 vollständig.",f:["Zähler","Nenner"],a:["2","7"],u:["",""],h:"Teile beide Zahlen durch 7.",s:"14/49 = 2/7."},
+ {q:"Erweitere 3/8 mit dem Faktor 2.",f:["Zähler","Nenner"],a:["6","16"],u:["",""],h:"Verdopple Zähler und Nenner.",s:"3/8 = 6/16."},
+ {q:"Kürze 30/45 vollständig.",f:["Zähler","Nenner"],a:["2","3"],u:["",""],h:"Der größte gemeinsame Teiler ist 15.",s:"30/45 = 2/3."},
+ {q:"Erweitere 4/7 mit dem Faktor 3.",f:["Zähler","Nenner"],a:["12","21"],u:["",""],h:"4 · 3 und 7 · 3.",s:"4/7 = 12/21."},
+ {q:"Kürze 16/20 vollständig.",f:["Zähler","Nenner"],a:["4","5"],u:["",""],h:"Teile durch 4.",s:"16/20 = 4/5."},
+ {q:"Erweitere 5/6 mit dem Faktor 4.",f:["Zähler","Nenner"],a:["20","24"],u:["",""],h:"Multipliziere Zähler und Nenner mit 4.",s:"5/6 = 20/24."},
+ {q:"Kürze 27/36 vollständig.",f:["Zähler","Nenner"],a:["3","4"],u:["",""],h:"Teile Zähler und Nenner durch 9.",s:"27/36 = 3/4."}
+],
+theorie: [
+ [1,"Ein kaufmännischer Monat hat 30 Tage.",true,"Nach der kaufmännischen Zinsmethode wird jeder Monat mit 30 Tagen gerechnet."],
+ [2,"Ein kaufmännisches Jahr hat 365 Tage.",false,"Ein kaufmännisches Jahr hat 360 Tage."],
+ [3,"Bei der kaufmännischen Zinsrechnung werden 12 Monate mit je 30 Tagen angesetzt.",true,"12 · 30 = 360 Tage."],
+ [4,"Bei vereinbartem Damnum wird zur Berechnung des Auszahlungsbetrags der Abnahmefaktor verwendet.",true,"Der Abnahmefaktor berücksichtigt den Abschlag durch das Damnum."],
+ [5,"Beim Zinseszins werden ausschließlich das ursprüngliche Kapital und niemals Zinsen verzinst.",false,"Beim Zinseszins werden auch bereits erhaltene Zinsen wieder verzinst."],
+ [6,"Zinseszins bedeutet, dass bereits gutgeschriebene Zinsen in den folgenden Perioden mitverzinst werden.",true,"Das ist die Kernaussage des Zinseszinseffekts."],
+ [7,"Die Zinseszinsformeln werden hier für Kapitalanlagen bzw. Kreditaufnahmen über einem Jahr verwendet.",true,"Die Vorgabe nennt ausdrücklich Laufzeiten über einem Jahr."],
+ [8,"Die Rentenformeln werden hier bei Kapitalanlagen bzw. Kreditaufnahmen über einem Jahr verwendet.",true,"Die Rentenrechnung wird im Diagramm dem Bereich über einem Jahr zugeordnet."],
+ [9,"Für Kapitalanlagen oder Kreditaufnahmen unter einem Jahr verwenden wir die Zinsformel.",true,"Bei einer Laufzeit bis zu einem Jahr führt das Diagramm zur Zinsformel."],
+ [10,"Bei einer nachschüssigen Rente wird die Zahlung jeweils zu Beginn des Jahres geleistet.",false,"Nachschüssig bedeutet Zahlung am Ende des Jahres."],
+ [11,"Bei einer vorschüssigen Rente wird die Zahlung jeweils zu Beginn des Jahres geleistet.",true,"Vorschüssig = zu Beginn des Jahres."],
+ [12,"Eine nachschüssige Rente wird jeweils am Ende des Jahres eingezahlt.",true,"Das ist die Definition der nachschüssigen Betrachtung."],
+ [13,"Eine vorschüssige Rente wird jeweils am Ende des Jahres eingezahlt.",false,"Vorschüssig bedeutet zu Beginn des Jahres."],
+ [14,"Bei Kapitalminderung ist K’n bzw. Kn häufig gleich null; dieser Wert steht aber nicht zwingend ausdrücklich in der Aufgabe.",true,"Im Kontext wird so lange Geld abgehoben, bis das Konto leer ist."],
+ [15,"Bei Kapitalminderung und gesuchter Laufzeit n wird das Ergebnis aufgerundet.",false,"Bei Kapitalminderung wird die Laufzeit stets abgerundet."],
+ [16,"Bei Kapitalmehrung und gesuchter Laufzeit n wird das Ergebnis aufgerundet.",true,"Bei Kapitalmehrung wird die Laufzeit stets aufgerundet."],
+ [17,"Aus q = 1 + p/100 folgt durch Umstellen p = (q − 1) · 100.",true,"Ziehe 1 ab und multipliziere mit 100."],
+ [18,"Eine nachschüssige Betrachtung liegt vor, wenn die Rente am Anfang jedes Jahres eingezahlt wird.",false,"Das wäre vorschüssig; nachschüssig ist am Jahresende."],
+ [19,"Bei gleicher Laufzeit sind die anfallenden Zinsen bei der Ratentilgung höher als bei der Annuitätentilgung.",true,"Die Aussage entspricht der vorgegebenen Theorie."],
+ [20,"Bei der nachschüssigen Rente wird der Betrag einmal mehr verzinst als bei der vorschüssigen Rente.",false,"Tatsächlich wird die vorschüssige Rente eine Periode länger verzinst."],
+ [21,"Bei der vorschüssigen Rente wird der Betrag einmal weniger verzinst als bei der nachschüssigen Rente.",false,"Tatsächlich wird die vorschüssige Rente eine Periode länger verzinst."],
+ [22,"Bei einer nachschüssigen Auszahlung wird die Rente nicht erst am Ende des Jahres ausgezahlt.",false,"Nachschüssig bedeutet: Zahlung am Ende des Jahres."]
+],
+formelweg: [
+ [1,"Die Laufzeit eines Sparvorgangs beträgt 8 Monate. Welche Formel ist laut Diagramm zu verwenden?","Zinsformel (FS Nr. 1)",["Zinsformel (FS Nr. 1)","Zinseszinsformel (FS Nr. 21)","Rentenformel (FS Nr. 22)","Endwertformel"],"Bei einer Laufzeit bis einschließlich einem Jahr führt der linke Ast zur Zinsformel."],
+ [2,"Ein Kredit läuft 3 Jahre. Es gibt keine regelmäßigen Ein- oder Auszahlungen. Welche Formel passt?","Zinseszinsformel (FS Nr. 21)",["Zinsformel (FS Nr. 1)","Zinseszinsformel (FS Nr. 21)","Rentenformel (FS Nr. 22)","Endwertformel"],"Über einem Jahr? Ja. Rentenzahlung? Nein."],
+ [3,"Eine Person zahlt 4 Jahre lang jährlich einen gleich hohen Betrag ein. Welche Formelgruppe passt?","Rentenformel (FS Nr. 22)",["Zinsformel (FS Nr. 1)","Zinseszinsformel (FS Nr. 21)","Rentenformel (FS Nr. 22)","Endwertformel"],"Über einem Jahr und regelmäßige Rentenzahlungen: Rentenformel."],
+ [4,"Eine Rente wird jeweils am Anfang eines Jahres eingezahlt. Wie heißt die Betrachtung?","Vorschüssig",["Vorschüssig","Nachschüssig"],"Am Anfang des Jahres bedeutet vorschüssig."],
+ [5,"Eine Rente wird jeweils am Ende eines Jahres eingezahlt. Wie heißt die Betrachtung?","Nachschüssig",["Vorschüssig","Nachschüssig"],"Am Ende des Jahres bedeutet nachschüssig."],
+ [6,"Es gibt regelmäßige Zahlungen und ein Anfangskapital K₀. Das Geld wird zusätzlich jedes Jahr eingezahlt. Welche Entwicklung liegt vor?","Kapitalmehrung",["Kapitalmehrung","Kapitalminderung","Keine Rentenrechnung"],"Einzahlungen erhöhen das Kapital."],
+ [7,"Es gibt regelmäßige Zahlungen und ein Anfangskapital K₀. Jährlich wird Geld vom Konto abgehoben. Welche Entwicklung liegt vor?","Kapitalminderung",["Kapitalmehrung","Kapitalminderung","Keine Rentenrechnung"],"Abhebungen verringern das Kapital."],
+ [8,"Es gibt eine Rentenzahlung, aber kein Anfangskapital K₀. Welcher Formeltyp ist laut Diagramm vorgesehen?","Endwertformel",["Endwertformel","Zinseszinsformel (FS Nr. 21)","Zinsformel (FS Nr. 1)"],"Wenn kein Anfangskapital vorhanden ist, zeigt der Diagrammzweig zur Endwertformel."],
+ [9,"Ein Guthaben wird 18 Monate ohne weitere Einzahlungen verzinst. Welche Formel passt?","Zinseszinsformel (FS Nr. 21)",["Zinsformel (FS Nr. 1)","Zinseszinsformel (FS Nr. 21)","Rentenformel (FS Nr. 22)"],"18 Monate sind mehr als ein Jahr; es gibt keine Rentenzahlung."],
+ [10,"Ein Guthaben wird 10 Monate ohne weitere Ein- oder Auszahlungen verzinst. Welche Formel passt?","Zinsformel (FS Nr. 1)",["Zinsformel (FS Nr. 1)","Zinseszinsformel (FS Nr. 21)","Rentenformel (FS Nr. 22)"],"Laufzeit höchstens ein Jahr."],
+ [11,"Eine jährliche Auszahlung erfolgt jeweils zum Jahresende. Wie ist die Rente zeitlich einzuordnen?","Nachschüssig",["Vorschüssig","Nachschüssig"],"Jahresende = nachschüssig."],
+ [12,"Eine jährliche Einzahlung erfolgt jeweils am Jahresanfang. Wie ist die Rente zeitlich einzuordnen?","Vorschüssig",["Vorschüssig","Nachschüssig"],"Jahresanfang = vorschüssig."],
+ [13,"Ein Konto startet mit 2.000 €; zusätzlich werden regelmäßig Beträge eingezahlt. Was liegt vor?","Anfangskapital vorhanden; Kapitalmehrung",["Anfangskapital vorhanden; Kapitalmehrung","Anfangskapital vorhanden; Kapitalminderung","Kein Anfangskapital; Endwertformel"],"K₀ ist vorhanden und Einzahlungen erhöhen das Kapital."],
+ [14,"Ein Konto startet mit 5.000 €; regelmäßig werden Beträge abgehoben. Was liegt vor?","Anfangskapital vorhanden; Kapitalminderung",["Anfangskapital vorhanden; Kapitalmehrung","Anfangskapital vorhanden; Kapitalminderung","Kein Anfangskapital; Endwertformel"],"K₀ ist vorhanden und Abhebungen führen zur Kapitalminderung."],
+ [15,"Eine Person spart 5 Jahre lang regelmäßig, startet aber bei 0 € und zahlt jeweils am Jahresende ein. Welche zeitliche Rentenart liegt vor?","Nachschüssige Rente ohne Anfangskapital",["Vorschüssige Rente mit Anfangskapital","Nachschüssige Rente ohne Anfangskapital","Zinseszins ohne Rente"],"Jahresende = nachschüssig; Start bei 0 € = kein Anfangskapital."],
+ [16,"Ein Kredit läuft 2 Jahre und es gibt keine regelmäßigen Ratenzahlungen. Welche Entscheidung triffst du im Diagramm?", "Zinseszinsformel (FS Nr. 21)",["Zinsformel (FS Nr. 1)","Zinseszinsformel (FS Nr. 21)","Rentenformel (FS Nr. 22)","Endwertformel"],"Mehr als ein Jahr, keine Rentenzahlung: FS Nr. 21."]
+]
+};
+
+const storageKey='finanzmathe_klasse10_v1';
+let state={};
+try {
+ const stored=localStorage.getItem(storageKey);
+ state=stored ? JSON.parse(stored) : {};
+ if(!state || typeof state!=='object' || Array.isArray(state)) state={};
+} catch(e) { state={}; }
+function save(){
+ try { localStorage.setItem(storageKey,JSON.stringify(state)); }
+ catch(e) { /* Übungen funktionieren auch ohne lokalen Speicher. */ }
+ updateStats();
+}
+function norm(s){return String(s??'').trim().toLowerCase().replace(/\s/g,'').replace(',','.').replace(/€/g,'').replace(/%/g,'')}
+function isRight(got,expected){return norm(got)===norm(expected)}
+function isAcceptedUnreducedFraction(got,expected){
+ // Gleichwertige Brüche mit Nenner 10, 100 oder 1000 sind in Block 1 erlaubt.
+ const g=String(got??'').trim().replace(/\s/g,'');
+ const e=String(expected??'').trim().replace(/\s/g,'');
+ const gm=g.match(/^(\d+)\/(\d+)$/), em=e.match(/^(\d+)\/(\d+)$/);
+ if(!gm || !em) return false;
+ const numerator=Number(gm[1]), denominator=Number(gm[2]);
+ const expectedNumerator=Number(em[1]), expectedDenominator=Number(em[2]);
+ if(![10,100,1000].includes(denominator) || denominator===0 || expectedDenominator===0) return false;
+ return numerator*expectedDenominator===expectedNumerator*denominator;
+}
+function makeTask(group,item,i){
+ const id=group+'-'+i, card=document.createElement('article');card.className='task';card.id='card-'+id;
+ let q, fields, answers, units, hint, solution, type='input';
+ if(group==='theorie'){
+  q=item[1]; answers=item[2]; solution=answers?'Wahr':'Falsch'; hint=item[3]; fields=['Entscheidung'];type='tf';
+ }else if(group==='formelweg'){
+  q=item[1]; solution=item[2]; fields=item[3]; hint=item[4]; answers=[solution];type='select';
+ }else{q=item.q;fields=item.f;answers=item.a;units=item.u;hint=item.h;solution=item.s}
+ const saved=state[id]||{};
+ card.innerHTML=`<div class="tasktop"><h3>Aufgabe ${i+1}</h3><span class="points">${group==='umwandeln'?answers.length:group==='zinsen'||group==='brueche'?answers.length:1} Punkt(e)</span></div><p>${q}</p>`;
+ const fieldsDiv=document.createElement('div');fieldsDiv.className='fields';
+ if(type==='tf'){
+  const wrap=document.createElement('div');wrap.className='fields';
+  ['Wahr','Falsch'].forEach(v=>{const lab=document.createElement('label');lab.className='field';lab.style.flex='0 0 auto';lab.innerHTML=`<span><input type="radio" name="${id}" value="${v}" ${saved.value===v?'checked':''}> ${v}</span>`;wrap.append(lab)});fieldsDiv.append(wrap);
+ }else if(type==='select'){
+  const lab=document.createElement('label');lab.className='field';lab.textContent='Wähle die passende Antwort';
+  const sel=document.createElement('select');sel.id='in-'+id;sel.style.cssText='max-width:460px;padding:10px;border:1px solid #bdc8d9;border-radius:8px;font:inherit';
+  sel.innerHTML='<option value="">Bitte auswählen …</option>'+fields.map(v=>`<option ${saved.value===v?'selected':''}>${v}</option>`).join('');lab.append(sel);fieldsDiv.append(lab);
+ }else{
+  fields.forEach((f,j)=>{const lab=document.createElement('label');lab.className='field';lab.innerHTML=`<span>${f}</span><span style="display:flex;align-items:center;gap:5px"><input type="text" inputmode="decimal" id="in-${id}-${j}" value="${saved.values?.[j]||''}" aria-label="${f}">${units?.[j]||''}</span>`;fieldsDiv.append(lab)});
+ }
+ card.append(fieldsDiv);
+ const actions=document.createElement('div');actions.className='actions';
+ const check=document.createElement('button');check.className='btn primary';check.textContent='Antwort prüfen';check.onclick=()=>checkTask(group,item,i,id,type,answers);
+ const tip=document.createElement('button');tip.className='btn';tip.textContent='Tipp anzeigen';tip.onclick=()=>{const box=card.querySelector('.hint');box.textContent=hint;box.className='feedback show hint'};
+ const reveal=document.createElement('button');reveal.className='btn';reveal.textContent='Lösung anzeigen';reveal.onclick=()=>{const box=card.querySelector('.solution');box.textContent='Lösung: '+solution;box.style.display='block'};
+ actions.append(check,tip,reveal);card.append(actions);
+ const fb=document.createElement('div');fb.className='feedback';fb.innerHTML='';card.append(fb);
+ const hintbox=document.createElement('div');hintbox.className='feedback hint';card.append(hintbox);
+ const sol=document.createElement('div');sol.className='solution';sol.style.display='none';card.append(sol);
+ if(saved.checked){fb.className='feedback show '+(saved.right?'good':'bad');fb.textContent=saved.message||'Bereits geprüft.'}
+ return card;
+}
+function checkTask(group,item,i,id,type,answers){
+ let values=[],right=true,message='';
+ if(type==='tf'){
+  const selected=document.querySelector(`input[name="${id}"]:checked`);values=[selected?.value||''];right=values[0]===(answers?'Wahr':'Falsch');
+ }else if(type==='select'){
+  values=[document.getElementById('in-'+id).value];right=values[0]===answers[0];
+ }else{
+  values=answers.map((_,j)=>document.getElementById('in-'+id+'-'+j).value);
+  right=values.every((v,j)=>isRight(v,answers[j]) || (group==='umwandeln' && isAcceptedUnreducedFraction(v,answers[j])));
+ }
+ const max=type==='tf'||type==='select'?1:answers.length;
+ const got=right?max:0;message=right?`Richtig! ${got} von ${max} Punkt(en).`:`Noch nicht richtig. ${got} von ${max} Punkt(en). Du kannst den Tipp nutzen und es erneut versuchen.`;
+ state[id]={checked:true,right,values,value:values[0],points:got,max,message};save();
+ const card=document.getElementById('card-'+id),fb=card.querySelector('.feedback');fb.className='feedback show '+(right?'good':'bad');fb.textContent=message;
+}
+function render(){
+ Object.keys(tasks).forEach(group=>{const target=document.getElementById('tasks-'+group);target.innerHTML='';tasks[group].forEach((item,i)=>target.append(makeTask(group,item,i,i)));});
+ updateStats();
+}
+function updateStats(){
+ let total=0,score=0,done=0,correct=0;
+ Object.keys(tasks).forEach(g=>tasks[g].forEach((item,i)=>{let id=g+'-'+i;let max=(g==='umwandeln'||g==='zinsen'||g==='brueche')?item.a.length:1;total+=max;if(state[id]?.checked){done++;score+=state[id].points||0;if(state[id].right)correct++}}));
+ const all=Object.keys(tasks).reduce((n,g)=>n+tasks[g].length,0);
+ document.getElementById('score').textContent=`${score} / ${total}`;document.getElementById('done').textContent=`${done} / ${all}`;document.getElementById('correct').textContent=correct;document.getElementById('percent').textContent=Math.round(score/total*100)+' %';document.getElementById('bar').style.width=(score/total*100)+'%';
+}
+function resetAll(){if(confirm('Möchtest du wirklich alle Antworten und den Lernstand auf diesem Gerät löschen?')){state={};save();render()}}
+document.querySelectorAll('#tabs button').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('#tabs button').forEach(x=>x.classList.toggle('active',x===b));document.querySelectorAll('.section').forEach(x=>x.classList.toggle('active',x.id===b.dataset.tab))}));
+render();
+</script>
+</body>
+</html>
